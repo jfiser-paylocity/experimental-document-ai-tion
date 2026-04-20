@@ -2,5 +2,11 @@
 mobile-next-gen-ios/
 mobile-next-gen-android/
 
+# Dependencies
+node_modules/
+
 # Output
 docs/
+
+# Secrets
+.env

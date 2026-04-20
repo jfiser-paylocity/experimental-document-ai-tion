@@ -36,6 +36,8 @@ When run as a master agent, save the output to a markdown file at the location r
 
 # Output Format
 
+DO NOT include any other content that is not explicitly requested in the template below. Follow the structure and formatting exactly.
+
 ## Document Header
 
 Start with:
@@ -65,7 +67,6 @@ A summary table of all endpoints:
 | `/v1/companies/{companyId}/employees` | POST | sentinet | apiGateway | Create employee |
 ```
 
-- Only include Auth and Service columns if at least one endpoint uses a non-default value.
 - **Brief Description**: a short phrase derived from the API method name (e.g. `fetchApprovals` → "Fetch approvals").
 
 ## Endpoint Detail Sections

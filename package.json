@@ -1,0 +1,8 @@
+
+{
+  "name": "experimental-document-ai-tion",
+  "private": true,
+  "devDependencies": {
+    "confluence-cli": "1.30.2"
+  }
+}

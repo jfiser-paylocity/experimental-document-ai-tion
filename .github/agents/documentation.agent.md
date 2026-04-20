@@ -41,6 +41,14 @@ Run the following subagents in parallel to gather different aspects of the docum
 - `datadog-logs.agent` - generates comprehensive Datadog log points documentation for the specified module.
 
 # Output
-Store all documentation in the `docs` directory, organized by module, documentation type and platform (e.g. `docs/punch/api/android.md`, `docs/punch/logs/android.md`).
+Store all documentation in Markdown format in the `docs` directory, organized by module, documentation type and platform (e.g. `docs/punch/api/android.md`, `docs/punch/logs/android.md`).
 
 If the documentation already exists, update it with new information instead of overwriting. Only focus on actual changes since the last update, do not regenerate the entire document or change wording/blank spaces.
+
+## Upload to Confluence
+
+**Important:** Skip this entire section if the `confluence-cli` tool is not configured/initialized.
+
+Use the `confluence-cli` tool to first read an existing Confluence tree/pages for the target module. If the documentation page already exists, update it with the new content. If it does not exist, create a new page under the appropriate parent page.
+
+Follow the hierarchy and structure of the local `docs` directory when creating/updating pages in Confluence.
