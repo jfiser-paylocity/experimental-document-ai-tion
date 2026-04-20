@@ -123,7 +123,7 @@ Only add any of the following sections if relevant to that endpoint (i.e. if the
 | `actionType` | string | yes | |
 ```
 
-For nested structures, show them inline or as a sub-table:
+For nested structures, show them inline or as a sub-table. Avoid using of platform specific object names (e.g. `PunchCorrectionSettings.DisabledStatus`) — instead, describe the structures based on field key (e.g. just "DisabledStatus"). For example:
 
 ```markdown
 | Field | Type | Required | Description |
@@ -192,3 +192,4 @@ Pagination via `nextPageToken` response header. Pass as `nextToken` query parame
 4. **Distinguish hardcoded from dynamic values.** Note in the description when a query parameter is always set to a fixed value.
 5. **Omit implementation details.** Do not mention retry timing, token refresh mechanics, or internal class names beyond struct/type names needed to describe the data shape.
 6. **Group endpoints logically.** If the feature has multiple endpoint enums (e.g. separate files for different sub-domains), use a top-level heading per group.
+7. **Endpoints sorting.** Within the overview table and the details sections, sort endpoints by URL path, then by HTTP method.
