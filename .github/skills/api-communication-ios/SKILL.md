@@ -38,6 +38,16 @@ For **each method** in the API class, extract:
 | **Extra headers** | The `headers:` argument, if present |
 | **Retry policy** | The `retryPolicy:` argument (e.g. `.readData`, `.noRetry`, `.safeWrite`) |
 
+### Edge case: Direct API call without an endpoint case
+
+In some cases, the API class may call `api.call(...)` directly with an inline endpoint definition instead of using a predefined enum case. For example:
+
+```swift
+try await api.call(endpoint: .init(path: "/custom/path", method: .post), data: ...)
+```
+
+In such cases, extract the endpoint details directly from the inline definition.
+
 ### How to identify the response type
 
 The generic overload `api.call<Result: Decodable>(endpoint:...) async throws -> Result` auto-decodes the response. The concrete return type of the enclosing method tells you the response struct. For example:
@@ -93,9 +103,9 @@ For request encoding, `JSONEncoders.default` uses `.sortedKeys` and ISO 8601 dat
 
 If a response struct conforms to `ApiRequiredFields`, it declares a `requiredFields` string that gets appended as `?fields=...` query parameter automatically. Note this in the endpoint description.
 
-### Optionals
+### Edge case: date/time properties represented as `String`
 
-Fields that are optional in the struct definition (e.g. `let middleName: String?`) may be omitted from the JSON or explicitly set to `null`. Note which fields are optional.
+If a date/time property is represented as `String`, it is probably parsed with custom logic later in code. Search the module for the property name to find where it is parsed. The usage will mostly be `DateFormatters.xFormatter.string(from: dateString)` (may be split across multiple variables).
 
 ## Step 4 — Compile the Results
 

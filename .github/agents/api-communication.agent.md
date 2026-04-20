@@ -17,6 +17,10 @@ Find:
 - All endpoint definitions (URL path, HTTP method, auth, service)
 - All API implementation methods (query parameters, request body, response type, retry policy, extra headers)
 - All request/response struct definitions (fields, types, nested objects)
+  - Find all nested structures recursively.
+  - For each field, determine if it is required or optional, and note any hardcoded values.
+  - For date/time fields, note the format (e.g. ISO 8601).
+  - For date/time fields represented as `String`, find the parsing logic (in the module) and note the expected format (or if it is used on UI directly).
 
 Read every relevant file completely. Do not skip or summarize source code — extract all fields and types.
 
@@ -66,39 +70,48 @@ A summary table of all endpoints:
 
 ## Endpoint Detail Sections
 
-For each endpoint, create a section:
+Separate endpoint details in the enclosing section with:
 
 ```markdown
-## GET `/v1/companies/{companyId}/employees`
+## Endpoint details
+```
+
+Then, for each endpoint, create a section:
+
+```markdown
+### GET `/v1/companies/{companyId}/employees`
 
 **Description:** Fetch employee list
 **Auth:** sentinet (default)
 **Service:** apiGateway (default)
 **Retry Policy:** readData
+```
+
+Only add any of the following sections if relevant to that endpoint (i.e. if the endpoint has query parameters, request body, etc.). Use the following formats, including the section headers:
 
 ### Path Parameters
 
+```markdown
 | Parameter | Description |
 |-----------|-------------|
 | `companyId` | Company identifier |
+```
 
 ### Query Parameters
 
+````markdown
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | `page` | integer | no | Page number for pagination |
 | `limit` | integer | no | Number of items per page, default is 20 |
 | `statusCode` | string | yes | Hardcoded to `"incomplete"` |
+```
 
 - Mark parameters as **required: yes** if they are always passed (hardcoded or mandatory argument).
 - Mark as **required: no** if they are conditionally included (e.g. from optional values, `compactMapValues`).
 - Note hardcoded values in the Description column.
 
 ### Request Body
-
-If no request body: write `None`.
-
-If present, show the structure:
 
 ```markdown
 **Content-Type:** application/json
@@ -130,10 +143,6 @@ For nested structures, show them inline or as a sub-table:
 
 Same format as Request Body. If no typed response: write `Raw response (no typed body)`.
 
-#### `String` properties with date/time in name
-
-Some date/time fields are represented as `String` and parsed with custom logic instead of using `Date` and `@MixedDateValue`. For example, a field named `startTime: String` may contain an ISO 8601 timestamp. In such cases, note the field type as `String` but also find the parsing logic and mention in the description that it contains date/time information, and how it is formatted.
-
 ### Type Mapping
 
 Use these platform-agnostic types in the output:
@@ -151,14 +160,13 @@ Use these platform-agnostic types in the output:
 | Enum with unknown fallback | `enum(case1, case2, ...)` |
 | Nested struct/class | reference by name, define separately |
 | `Data`, `ByteArray` | `binary` |
+```
 
 ### Extra Headers
 
 If the API method passes custom headers, list them:
 
 ```markdown
-### Extra Headers
-
 | Header | Value | Description |
 |--------|-------|-------------|
 | `pctytid` | `{identityKey}` | Identity key from user session |
@@ -171,8 +179,6 @@ If no extra headers, omit the section.
 If the endpoint uses pagination (e.g. `nextPageToken` from response headers), note it:
 
 ```markdown
-### Pagination
-
 Pagination via `nextPageToken` response header. Pass as `nextToken` query parameter for next page.
 ```
 
