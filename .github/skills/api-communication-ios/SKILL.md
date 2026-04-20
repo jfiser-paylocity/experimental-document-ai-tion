@@ -1,6 +1,6 @@
 ---
 name: api-communication-ios
-description: Analyze API communication points in iOS projects
+description: Use when you need to analyze the iOS source code and find all API communication points and their details.
 ---
 
 # Goal
@@ -92,10 +92,6 @@ For request encoding, `JSONEncoders.default` uses `.sortedKeys` and ISO 8601 dat
 ### `ApiRequiredFields`
 
 If a response struct conforms to `ApiRequiredFields`, it declares a `requiredFields` string that gets appended as `?fields=...` query parameter automatically. Note this in the endpoint description.
-
-### `String` properties with date/time in name
-
-Some date/time fields are represented as `String` and parsed with custom logic instead of using `Date` and `@MixedDateValue`. For example, a field named `startTime: String` may contain an ISO 8601 timestamp. In such cases, note the field type as `String` but also find the parsing logic and mention in the description that it contains date/time information, and how it is formatted.
 
 ### Optionals
 
