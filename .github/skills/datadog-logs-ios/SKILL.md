@@ -1,5 +1,5 @@
 ---
-name: datadog-logs-android
+name: datadog-logs-ios
 description: Analyze Datalog usages in iOS projects
 ---
 

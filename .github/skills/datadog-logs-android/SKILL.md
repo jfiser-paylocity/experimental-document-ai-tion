@@ -1,6 +1,6 @@
 ---
 name: datadog-logs-android
-description: Analyze Datadog logging usages in Android projects via the app's Logger abstraction
+description: Use for Datadog Logs in Android (Kotlin). Covers the Logger abstraction architecture, sub-loggers / batch-flow loggers (e.g. PunchFlowLogger), search patterns and methodology for finding all direct and indirect logging calls, LogCategory, LogLevel, LogAttribute, SDK initialization, and the verification protocol for ensuring completeness.
 ---
 
 ## Architecture
@@ -15,14 +15,6 @@ The app does **not** call the Datadog SDK directly for logging. Instead, it uses
 
 ### How logs flow to Datadog
 - `Logger.info("msg", LogCategory.X)` → enqueued → `DatadogLogger.log()` → formats message as `"(category) msg"`, maps attributes to `Map<String, Any>`, calls Datadog SDK `Logger.log(priority, message, attributes)`.
-
-## SDK Initialization
-- `DataDogInitializerImpl` in `core-data/.../api/DataDogInitializer.kt`.
-- Calls `Datadog.initialize` with `Configuration.Builder(clientToken, env, variant, service)`.
-- `service`: `"MobileNG_Android"`, `site`: `US1`, `crashReportsEnabled`: `true`, `trackingConsent`: `GRANTED`.
-- Logger configured with `remoteLogThreshold`: `Info`, `remoteSampleRate`: `100%`, `bundleWithRum`: `false`.
-- Default attributes on logger: `appRunId`, `appBuild`, `buildType`, `deviceId`, `flavor`, `googlePlayServicesVersion`, `osVersion`, `portalVersion`, `service`, `version`, `webViewVersion`, `isRooted`.
-- Dynamic attributes set on user session change: `employeeId`, `companyId`, `userId`, `identityKey`, `userType`, `full_logs`, `selectedCompanyId`.
 
 ## Batch / Flow Loggers (Sub-Loggers)
 

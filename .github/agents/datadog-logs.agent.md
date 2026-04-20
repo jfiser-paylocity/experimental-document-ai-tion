@@ -3,13 +3,21 @@ description: Analyze the usage of datadog logs in the codebase and gather inform
 user-invocable: true
 ---
 
-Analyze the source code and find **every single** logging point that is sent to Datadog, along with full contextual details.
+Analyze the source code and find **every single** logging point that is sent to Datadog, along with full contextual details and produce full table of the log points.
+Create and save the summary in a markdown file in the repository. The file should be named `datadog-logs-analysis.md` and placed in the root directory. The summary should include:
+- A comprehensive list of all log points sent to Datadog, including:
+  - Log level
+  - Log message or template (with variable names)
+  - Log category or categories
+  - Structured attributes (key-value pairs) with their source values/variables
+  - Exact file path, class name, and function/method name for each log point
+  - Detailed trigger information for each log point (e.g., user action, API call, error/exception, lifecycle event, background job, state change, conditional check)
 
-**IMPORTANT**: This project uses an abstraction layer over the Datadog SDK. Do NOT search for raw Datadog SDK calls. Refer to the agent skills for platform-specific architecture, search patterns, search methodology, and SDK configuration details.
+**IMPORTANT**: Refer to the agent skills for platform-specific architecture, search patterns, search methodology, and SDK configuration details. 
 
 # Requirements
 
-## 1. Direct Logger Calls
+## 1. Logger Calls
 - Find ALL usages of the app's logging abstraction in the codebase (the specified module or all modules if none specified).
 - Use the search patterns and methodology documented in the platform-specific skill file.
 - **Do NOT stop early.** If a search returns many results, paginate or increase `maxResults`. Every single call site must be listed.
@@ -29,21 +37,6 @@ Analyze the source code and find **every single** logging point that is sent to 
     - If triggered by a **conditional check**: what condition is being evaluated
     - Include the **surrounding context** (e.g., "inside catch block of fetchPayroll()", "after successful biometric prompt")
 
-## 2. Sub-Logger / Batch Logger Calls
-Some modules use **sub-loggers** that accumulate messages in memory and flush them as a single Datadog log entry. Refer to the platform skill file for the list of known sub-loggers and their search patterns.
-
-- Search for all known sub-logger method calls as documented in the skill.
-- For each sub-logger call, extract the same details as above (level is determined at flush time — note the sub-logger's configured level from the skill file).
-- Clearly mark these as **"Batched via [SubLoggerName]"** in the output.
-- Also document where the flush / submit and clear methods are called, and what triggers them.
-
-## 3. Crash Reporting
-- Find crash/error reporting usages (e.g., throwable loggers, uncaught exception handlers in sub-loggers).
-- For each, document the exception type caught and the context.
-
-## 4. SDK Configuration
-- Summarize SDK initialization configuration: environment, sample rate, tracking consent, default attributes, dynamic attributes, service name.
-
 # Completeness Rules
 - **NEVER skip, summarize, or group multiple log calls into one row.** Every individual call site gets its own row.
 - **NEVER say "and similar" or "etc."** — list every single occurrence.
@@ -60,31 +53,11 @@ Some modules use **sub-loggers** that accumulate messages in memory and flush th
 Output the results in a structured format. (DO NOT GROUP OR AGGREGATE) For example:
 
 ```
-# Direct Logger Calls
-| # | Level | Message | Category | Attributes | File / Class.Function() | Trigger (detailed) |
+# Logger calls
+| # | Level | Message | Category | Attributes | Method | Trigger (detailed) |
 |---|-------|---------|----------|------------|------------------------|--------------------|
-| 1 | INFO | "User login successful" | Authentication | [userId, companyId] | login/…/LoginViewModel.onLoginSuccess() | User taps "Sign In" button on login screen; called after successful authentication API response |
-| 2 | ERROR | "Failed to fetch user data: ${error.message}" | Api | [endpoint, statusCode, errorBody] | profile/…/ProfileRepository.fetchUser() | API returns non-2xx; inside catch block of fetchUser() |
+| 1 | INFO | "User login successful" | Authentication | [userId, companyId] | onLoginSuccess() | User taps "Sign In" button on login screen; called after successful authentication API response |
+| 2 | ERROR | "Failed to fetch user data: ${error.message}" | Api | [endpoint, statusCode, errorBody] | fetchUser() | API returns non-2xx; inside catch block of fetchUser() |
 
-# Sub-Logger Calls (Batched)
-| # | Sub-Logger | Method | Message / Param | File / Class.Function() | Trigger (detailed) |
-|---|-----------|--------|----------------|------------------------|--------------------|
-| 1 | PunchFlowLogger | logScreenShown | "PunchConfirmation" | punch-v2/…/PunchConfirmationScreen.kt | Screen composable enters composition |
-| 2 | PunchFlowLogger | logButtonTapped | "Submit" | punch-v2/…/PunchConfirmationScreen.kt | User taps "Submit" button on PunchConfirmation screen |
-| 3 | PunchFlowLogger | submitLog | (flushes all) | punch-v2/…/PunchFlowViewModel.onPunchComplete() | Punch flow completes successfully after API confirms punch |
 
-# Crash Reporting
-| # | Method | Exception / Context | File / Class.Function() | Trigger |
-|---|--------|--------------------|-----------------------|--------|
-
-# SDK Configuration
-| Setting | Value |
-|---------|-------|
-| Service Name | ... |
-| Environment | ... |
-| Sample Rate | ... |
-| Tracking Consent | ... |
-| Crash Reports | ... |
-| Default Attributes | ... |
-| Dynamic Attributes | ... |
 
