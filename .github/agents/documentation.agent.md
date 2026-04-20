@@ -1,5 +1,9 @@
 ---
 description: Generate documentation for the project. (master agent)
+argument-hint: Generate a documentation for Punch module in the mobile-next-gen-ios project.
+agents:
+  - api-communication
+  - datadog-logs
 tools:
   - agent
   - edit/createDirectory
@@ -11,7 +15,6 @@ tools:
   - search/listDirectory
   - search/searchResults
 model: GPT-5.4 mini
-argument-hint: Generate a documentation for Punch module in the mobile-next-gen-ios project.
 ---
 
 Orchestrate the documentation generation process from the source code by running dedicated agents. Do not generate documentation directly in this agent. Instead, delegate to subagents that specialize in different aspects of the documentation (e.g. API communication, architecture overview, data models, etc.). Each subagent should return its output as a markdown string, which you will compile into a final documents hierarchy.
@@ -35,9 +38,9 @@ Orchestrate the documentation generation process from the source code by running
 
 Run the following subagents in parallel to gather different aspects of the documentation. Each agent should return its output as a markdown string.
 - `api-communication.agent` - generates comprehensive API documentation for the specified package/module.
-- `datadog-logs.agent` - analyzes the Datadog logs for the specified module and extracts relevant information.
+- `datadog-logs.agent` - generates comprehensive Datadog log points documentation for the specified module.
 
 # Output
-Store all documentation in the `docs` directory, organized by module, documentation type and platform (e.g. `docs/punch/api/android.md`).
+Store all documentation in the `docs` directory, organized by module, documentation type and platform (e.g. `docs/punch/api/android.md`, `docs/punch/logs/android.md`).
 
 If the documentation already exists, update it with new information instead of overwriting. Only focus on actual changes since the last update, do not regenerate the entire document or change wording/blank spaces.

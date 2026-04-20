@@ -30,7 +30,7 @@ The document must be **platform-agnostic** — use generic terminology (not Swif
 
 When run as a subagent, return the generated documentation as a markdown string to the caller agent. Do not save to a file or print to standard output, as the caller agent will handle that.
 
-When run as a master agent, save the output to a markdown file at the location requested by the user, or propose a reasonable default path like `docs/api-communication/<feature-name>.md`.
+When run as a master agent, save the output to a markdown file at the location requested by the user, or propose a reasonable default path like `docs/<feature-name>/api/<platform>.md`.
 
 ---
 

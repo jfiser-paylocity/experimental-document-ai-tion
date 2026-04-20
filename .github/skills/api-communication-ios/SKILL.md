@@ -107,18 +107,6 @@ If a response struct conforms to `ApiRequiredFields`, it declares a `requiredFie
 
 If a date/time property is represented as `String`, it is probably parsed with custom logic later in code. Search the module for the property name to find where it is parsed. The usage will mostly be `DateFormatters.xFormatter.string(from: dateString)` (may be split across multiple variables).
 
-## Step 4 — Compile the Results
-
-For each endpoint, produce a summary with:
-
-1. **Endpoint name**
-2. **HTTP method** and **URL path** (with path parameter placeholders)
-3. **Service** and **auth type** (only if non-default)
-4. **Query parameters** (name, type, hardcoded/dynamic)
-5. **Request body** — struct name and all fields (with types, recursively), or "none"
-6. **Response body** — struct name and all fields (with types, recursively), or "none"
-7. **Retry policy**
-
 ---
 
 # Reference: File Location Patterns

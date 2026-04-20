@@ -148,22 +148,6 @@ The `apiCall` function wraps a suspend API call and:
 
 Repositories commonly use `coroutineScope` with `async { apiCall { ... } }` to make multiple API calls in parallel, then `.await()` each result.
 
-## Step 5 — Compile the Results
-
-For each endpoint, produce a summary with:
-
-1. **Function name** and **API interface** it belongs to
-2. **HTTP method** and **URL path** (with path parameter placeholders)
-3. **Base URL** and **auth type**
-4. **Retry policy** and **endpoint type** (if non-default)
-5. **Tracing** (if `@TracedRequest` is present)
-6. **Path parameters** (name, type)
-7. **Query parameters** (name, type, default value if any)
-8. **Request headers** (dynamic `@Header` and static `@Headers`)
-9. **Request body** — DTO name and all fields (with types and JSON keys, recursively), or "none"
-10. **Response type** — DTO name and all fields (with types and JSON keys, recursively), or "none"
-11. **Pagination** — if `Response<T>` is used, note header-based pagination (`X-Pcty-Next-Token`)
-
 ---
 
 # Reference: File Location Patterns
