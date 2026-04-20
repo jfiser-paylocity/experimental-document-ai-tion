@@ -9,6 +9,9 @@ tools:
   - edit/createDirectory
   - edit/createFile
   - edit/editFiles
+  - execute/getTerminalOutput
+  - execute/runInTerminal
+  - execute/sendToTerminal
   - read/readFile
   - search/codebase
   - search/fileSearch
