@@ -44,7 +44,7 @@ Run the following subagents in parallel to gather different aspects of the docum
 - `datadog-logs.agent` - generates comprehensive Datadog log points documentation for the specified module.
 
 # Output
-Store all documentation in Markdown format in the `docs` directory, organized by module, documentation type and platform (e.g. `docs/punch/api/android.md`, `docs/punch/logs/android.md`).
+Store all documentation in Markdown format in the `docs` directory in the root, organized by module, documentation type and platform (e.g. `docs/punch/api/android.md`, `docs/punch/logs/android.md`).
 
 If the documentation already exists, update it with new information instead of overwriting. Only focus on actual changes since the last update, do not regenerate the entire document or change wording/blank spaces.
 
