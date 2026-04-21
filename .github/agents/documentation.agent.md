@@ -17,7 +17,7 @@ tools:
   - search/fileSearch
   - search/listDirectory
   - search/searchResults
-model: gpt-5.4-mini
+model: GPT-5.4 mini
 ---
 
 Orchestrate the documentation generation process from the source code by running dedicated agents. Do not generate documentation directly in this agent. Instead, delegate to subagents that specialize in different aspects of the documentation (e.g. API communication, architecture overview, data models, etc.). Each subagent should return its output as a markdown string, which you will compile into a final documents hierarchy.
@@ -50,12 +50,9 @@ If the documentation already exists, update it with new information instead of o
 
 ## Upload to Confluence
 
-**Important:** Skip this step if `confluence-cli` tool is not set up.
-
 Use the `confluence-cli` tool to first read an existing Confluence tree/pages for the target module. If the documentation page already exists, update it with the new content. If it does not exist, create a new page under the appropriate parent page.
 
 Follow the hierarchy and structure of the local `docs` directory when creating/updating pages in Confluence.
-
 ### Confluence page title map
 
 To avoid collisions in confluence page titles, use the following mapping from local documentation paths to Confluence page titles:
@@ -65,4 +62,4 @@ To avoid collisions in confluence page titles, use the following mapping from lo
 | `docs/punch`             | Document-AI-tion - Punch             |
 | `docs/punch/api`         | Document-AI-tion - Punch - API       |
 | `docs/punch/logs`        | Document-AI-tion - Punch - Datadog   |
-| `docs/punch/api/ios.md`  | Document-AI-tion - Punch - API - iOS |
+| `docs/punch/api/ios.md`  | Document-AI-tion - Punch - API - iOS (or Android) |
