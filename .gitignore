@@ -4,6 +4,7 @@ mobile-next-gen-android/
 
 # Dependencies
 node_modules/
+.venv/
 
 # Output
 docs/*
