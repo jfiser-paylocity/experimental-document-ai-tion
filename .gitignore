@@ -6,7 +6,7 @@ mobile-next-gen-android/
 node_modules/
 
 # Output
-docs/
+docs/*
 
 # Secrets
 .env
