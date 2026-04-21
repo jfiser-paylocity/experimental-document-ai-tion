@@ -11,6 +11,7 @@ Given a feature module path (e.g. `punch/punch-impl`), find and describe all API
 
 ## Step 1 — Find API Interface Definitions
 
+**IMPORTANT**: Only analyze API interfaces that are actually used by the feature module. If the module has no API interfaces, end the process early and return an empty document. Do not analyze lower layers (e.g. presentation or domain) that are not relevant to API communication.
 Search for files matching `*Api.kt` inside the feature module's `data/remote/` folder. A feature may have **multiple** API interfaces (e.g. `PunchApi.kt`, `ServerTimeApi.kt`, `TimeApi.kt`).
 
 Each API interface extends either `Api` (kotlinx.serialization) or `LegacyApi` (Moshi). Read the full file and extract from each function:
