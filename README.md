@@ -26,3 +26,7 @@ AI-powered documentation generator for mobile apps. Uses GitHub Copilot agents a
 3. **Add source repositories**
 
    Clone `mobile-next-gen-ios` and `mobile-next-gen-android` into the project root. These directories are gitignored.
+
+## Test output
+
+See [Document-AI-tion](https://paylocity.atlassian.net/wiki/spaces/MOB/pages/3112108456/Document-AI-tion) Confluence page for sample output.
