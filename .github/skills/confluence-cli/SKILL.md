@@ -12,6 +12,8 @@ A CLI tool for Atlassian Confluence. Lets you read, create and update pages from
 
 You are only allowed to create/edit child pages of the root page with ID 3112108456. This is to ensure all content created by the agent is organized under a single parent page. Do not create or edit pages outside of this subtree. Do not edit the given root page.
 
+You are NOT allowed to use any other command than what is listed here.
+
 Always print out list of pages that were created or edited, along with their URLs.
 
 ## Installation validation
