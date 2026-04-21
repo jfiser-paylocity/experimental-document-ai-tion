@@ -10,11 +10,10 @@ A CLI tool for Atlassian Confluence. Lets you read, create and update pages from
 
 ## Constraints
 
-You are only allowed to create/edit child pages of the root page with ID 3112108456. This is to ensure all content created by the agent is organized under a single parent page. Do not create or edit pages outside of this subtree. Do not edit the given root page.
-
-You are NOT allowed to use any other command than what is listed here.
-
-Always print out list of pages that were created or edited, along with their URLs.
+1. You are only allowed to create/edit child pages of the root page with ID 3112108456. This is to ensure all content created by the agent is organized under a single parent page. Do not create or edit pages outside of this subtree. Do not edit the given root page.
+2. You are NOT allowed to use any other command than what is listed here.
+3. Always print out list of pages that were created or edited, along with their URLs.
+4. Run all commands as a locally installed `npm` package via `npx confluence <command>`.
 
 ## Installation validation
 
@@ -59,7 +58,7 @@ Required classic scopes for scoped tokens:
 
 ## Set up validation
 
-To verify if the tool is properly set up, simply just check that both environment variables are non-empty: `CONFLUENCE_EMAIL` and `CONFLUENCE_API_TOKEN`.
+To verify if the tool is properly set up, simply just run `confluence spaces` read command and check the output.
 
 ---
 
@@ -420,9 +419,15 @@ confluence children 123456789 --recursive --format json | jq '.[].id'
 | Error | Cause | Fix |
 |---|---|---|
 | `No configuration found` | No config file and no env vars set | Set env vars or run `confluence init` |
-| 400 on inline comment creation | Editor metadata required | Use `--location footer` or reply to existing inline comment with `--parent` |
 | `File not found: <path>` | `--file` path doesn't exist | Check the path before calling the command |
 | `At least one of --title, --file, or --content must be provided` | `update` called with no content options | Provide at least one of the required options |
 | `Profile "<name>" not found!` | Specified profile doesn't exist | Run `confluence profile list` to see available profiles |
 | `Cannot delete the only remaining profile.` | Tried to remove the last profile | Add another profile before removing |
 | `This profile is in read-only mode` | Write command used with a read-only profile | Use a writable profile or remove `readOnly` from config |
+
+### Error 400 possible reasons
+
+When an error 400 is returned from the API, it generally means the request was malformed. Common causes include:
+
+- Missing required fields
+- Page title already exists in the space (for create commands)

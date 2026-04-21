@@ -55,3 +55,14 @@ If the documentation already exists, update it with new information instead of o
 Use the `confluence-cli` tool to first read an existing Confluence tree/pages for the target module. If the documentation page already exists, update it with the new content. If it does not exist, create a new page under the appropriate parent page.
 
 Follow the hierarchy and structure of the local `docs` directory when creating/updating pages in Confluence.
+
+### Confluence page title map
+
+To avoid collisions in confluence page titles, use the following mapping from local documentation paths to Confluence page titles:
+
+| Local Doc Path           | Confluence Page Title                |
+|--------------------------|--------------------------------------|
+| `docs/punch`             | Document-AI-tion - Punch             |
+| `docs/punch/api`         | Document-AI-tion - Punch - API       |
+| `docs/punch/logs`        | Document-AI-tion - Punch - Datadog   |
+| `docs/punch/api/ios.md`  | Document-AI-tion - Punch - API - iOS |
