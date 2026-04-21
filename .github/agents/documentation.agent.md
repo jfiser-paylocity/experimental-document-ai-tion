@@ -101,11 +101,14 @@ Follow the hierarchy and structure of the local `docs` directory when creating/u
 
 #### Confluence page title map
 
-To avoid collisions in confluence page titles, use the following mapping from local documentation paths to Confluence page titles:
+To avoid collisions in confluence page titles, use the following naming convention derived from the local doc path:
 
-| Local Doc Path           | Confluence Page Title                |
-|--------------------------|--------------------------------------|
-| `docs/punch`             | Document-AI-tion - Punch             |
-| `docs/punch/api`         | Document-AI-tion - Punch - API       |
-| `docs/punch/logs`        | Document-AI-tion - Punch - Datadog   |
-| `docs/punch/api/ios.md`  | Document-AI-tion - Punch - API - iOS (or Android) |
+| Local Doc Path                      | Confluence Page Title                              |
+|-------------------------------------|----------------------------------------------------|
+| `docs/<module>`                     | Document-AI-tion - \<Module\>                      |
+| `docs/<module>/api`                 | Document-AI-tion - \<Module\> - API                |
+| `docs/<module>/logs`                | Document-AI-tion - \<Module\> - Datadog            |
+| `docs/<module>/api/<platform>.md`   | Document-AI-tion - \<Module\> - API - \<Platform\> |
+| `docs/<module>/logs/<platform>.md`  | Document-AI-tion - \<Module\> - Datadog - \<Platform\> |
+
+Where `<Module>` and `<Platform>` are title-cased (e.g. `tasks` → `Tasks`, `android` → `Android`).

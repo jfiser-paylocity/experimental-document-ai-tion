@@ -61,7 +61,7 @@ async def run(module: str, project_path: Path) -> None:
 
     async with CopilotClient(config) as client:
         async with await client.create_session(
-            model=model,
+            agent="documentation",
             on_permission_request=PermissionHandler.approve_all,
             system_message={"content": system_prompt},
         ) as session:
