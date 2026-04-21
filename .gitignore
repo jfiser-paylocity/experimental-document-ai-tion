@@ -5,6 +5,7 @@ mobile-next-gen-android/
 # Dependencies
 node_modules/
 .venv/
+cli/__pycache__/
 
 # Output
 docs/*
