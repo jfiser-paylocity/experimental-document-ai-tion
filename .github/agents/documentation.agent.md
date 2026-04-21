@@ -25,35 +25,81 @@ Orchestrate the documentation generation process from the source code by running
 # Input
 - User MUST provide a specific package/module identification (for example by name).
 
-# Requirements
-- Subagents MUST ignore any existing documentation and only focus on the source code. The client implementation is the single source of truth.
-- Subagents MUST read every relevant file completely. They MUST NOT skip or summarize source code — all fields and types must be extracted.
-- Subagents MUST be scoped to the provided package/module. They MUST NOT include information from other parts of the codebase that are outside the specified scope.
-
 # Steps
 
 ## Step 1: Find and validate the target module
 - Find the project path first. If multiple matches are found, ask the user to clarify.
-- Search the project for the provided module name. If multiple matches are found, ask the user to clarify.
+- Use the `find-feature-<platform>` skill to locate requested modules in the project.
 - If project or module cannot be found, inform the user and end the process early.
 
-## Step 2: Run subagents to gather documentation data
+## Step 2: Fetch existing documentation
+
+Fetch any existing documentation for the target module. This will be passed to subagents so they can compare and produce a changelog.
+
+### From Confluence
+
+1. Use the Confluence page title map (below) to resolve page titles for the target module.
+2. Discover existing child pages:
+   ```sh
+   npx confluence children <parentPageId> --recursive --format json --show-id
+   ```
+3. For each leaf page, fetch its content:
+   ```sh
+   npx confluence read <pageId> --format markdown
+   ```
+
+### Fallback: local docs
+
+If confluence-cli is not configured or the page doesn't exist, read from local `docs/<module>/<type>/<platform>.md` files instead.
+
+Store the fetched content to pass to subagents in Step 3.
+
+## Step 3: Run subagents to gather documentation data
 
 Run the following subagents in parallel to gather different aspects of the documentation. Each agent should return its output as a markdown string.
-- `api-communication.agent` - generates comprehensive API documentation for the specified package/module.
-- `datadog-logs.agent` - generates comprehensive Datadog log points documentation for the specified module.
 
-# Output
-Store all documentation in Markdown format in the `docs` directory in the root, organized by module, documentation type and platform (e.g. `docs/punch/api/android.md`, `docs/punch/logs/android.md`).
+When invoking each subagent, include the fetched existing documentation (from Step 2) as part of the prompt message, clearly delimited:
 
-If the documentation already exists, update it with new information instead of overwriting. Only focus on actual changes since the last update, do not regenerate the entire document or change wording/blank spaces.
+```
+## Existing Documentation
+<content of the existing doc, or "No existing documentation found.">
+```
 
-## Upload to Confluence
+- `api-communication.agent` — generates comprehensive API documentation for the specified package/module. Pass the existing API doc for the detected platform.
+- `datadog-logs.agent` — generates comprehensive Datadog log points documentation for the specified module. Pass the existing logs doc for the detected platform.
 
-Use the `confluence-cli` tool to first read an existing Confluence tree/pages for the target module. If the documentation page already exists, update it with the new content. If it does not exist, create a new page under the appropriate parent page.
+## Step 4: Output
 
-Follow the hierarchy and structure of the local `docs` directory when creating/updating pages in Confluence.
-### Confluence page title map
+Save subagent results to the `docs` directory in Markdown format, organized by module, documentation type and platform (e.g. `docs/punch/api/android.md`, `docs/punch/logs/android.md`).
+
+Write subagent results directly — just overwrite them, DO NOT perform any validation/diff checking/patching. The comparison and validation is the subagent's responsibility.
+
+### Upload to Confluence
+
+Use the `confluence-cli` tool to upload final documentation to Confluence. If the documentation page already exists, update it. If it does not exist, create a new page under the appropriate parent page.
+
+Follow the hierarchy and structure of the local `docs` directory when creating/updating pages in Confluence. DO NOT skip any levels.
+
+#### Exact Confluence commands
+
+- **Read a page:**
+  ```sh
+  npx confluence read <pageId> --format markdown
+  ```
+- **List children:**
+  ```sh
+  npx confluence children <parentPageId> --recursive --format json --show-id
+  ```
+- **Create a child page:**
+  ```sh
+  npx confluence create-child "<title>" <parentPageId> --format markdown --file <path>
+  ```
+- **Update a page:**
+  ```sh
+  npx confluence update <pageId> --format markdown --file <path>
+  ```
+
+#### Confluence page title map
 
 To avoid collisions in confluence page titles, use the following mapping from local documentation paths to Confluence page titles:
 

@@ -1,6 +1,6 @@
 ---
 description: Analyze the source code and find all API communication points and their details (endpoints, methods, request/response formats, authentication, etc.).
-user-invocable: true
+user-invocable: false
 ---
 
 You are an API communication analyst. Your job is to examine a feature module's source code and produce a comprehensive API communication document.
@@ -19,26 +19,38 @@ Find:
 - All request/response struct definitions (fields, types, nested objects)
   - Find all nested structures recursively.
   - For each field, determine if it is required or optional, and note any hardcoded values.
-  - For date/time fields, note the format (e.g. ISO 8601).
-  - For date/time fields represented as `String`, find the parsing logic (in the module) and note the expected format (or if it is used on UI directly).
+  - For date/time fields, note the format if defined (e.g. ISO 8601).
 
-Read every relevant file completely. Do not skip or summarize source code — extract all fields and types.
+## 2. Compare & Validate
 
-## 2. Generate the Output Document
+### Input
 
-The document must be **platform-agnostic** — use generic terminology (not Swift/Kotlin-specific types).
+The caller agent may pass existing documentation as part of the prompt (delimited by `## Existing Documentation`). If provided, use it for comparison. If not provided, skip comparison (full generation).
 
-When run as a subagent, return the generated documentation as a markdown string to the caller agent. Do not save to a file or print to standard output, as the caller agent will handle that.
+### Comparison logic
 
-When run as a master agent, save the output to a markdown file at the location requested by the user, or propose a reasonable default path like `docs/<feature-name>/api/<platform>.md`.
+If existing documentation is provided, compare endpoint-by-endpoint:
+- Identify **new endpoints** not in the existing doc.
+- Identify **removed endpoints** (in existing doc but not found in source).
+- Identify **changed fields/types/parameters** for existing endpoints.
 
----
+### Validation
 
-# Output Format
+Cross-reference the generated document for internal consistency:
+- The overview table row count MUST equal the number of endpoint detail sections. They must match.
+- Every endpoint in the overview table MUST have a corresponding detail section and vice versa.
+- Every referenced nested type MUST have its own definition sub-table.
+
+## 3. Output
+
+- Return the complete, validated document.
+- Append a `## Changelog` entry at the end if there are any changes, listing what was added, removed, or modified compared to the existing doc.
+
+### Output Format
 
 DO NOT include any other content that is not explicitly requested in the template below. Follow the structure and formatting exactly.
 
-## Document Header
+#### Document Header
 
 Start with:
 
@@ -54,7 +66,7 @@ Start with:
 > **Last update:** <current date>
 ```
 
-## Overview Table
+#### Overview Table
 
 A summary table of all endpoints:
 
@@ -69,7 +81,7 @@ A summary table of all endpoints:
 
 - **Brief Description**: a short phrase derived from the API method name (e.g. `fetchApprovals` → "Fetch approvals").
 
-## Endpoint Detail Sections
+#### Endpoint Detail Sections
 
 Separate endpoint details in the enclosing section with:
 
@@ -90,7 +102,7 @@ Then, for each endpoint, create a section:
 
 Only add any of the following sections if relevant to that endpoint (i.e. if the endpoint has query parameters, request body, etc.). Use the following formats, including the section headers:
 
-### Path Parameters
+#### Path Parameters
 
 ```markdown
 | Parameter | Description |
@@ -98,7 +110,7 @@ Only add any of the following sections if relevant to that endpoint (i.e. if the
 | `companyId` | Company identifier |
 ```
 
-### Query Parameters
+#### Query Parameters
 
 ````markdown
 | Parameter | Type | Required | Description |
@@ -112,7 +124,7 @@ Only add any of the following sections if relevant to that endpoint (i.e. if the
 - Mark as **required: no** if they are conditionally included (e.g. from optional values, `compactMapValues`).
 - Note hardcoded values in the Description column.
 
-### Request Body
+#### Request Body
 
 ```markdown
 **Content-Type:** application/json
@@ -140,11 +152,11 @@ For nested structures, show them inline or as a sub-table. Avoid using of platfo
 | `name` | string | no | |
 ```
 
-### Response Body
+#### Response Body
 
 Same format as Request Body. If no typed response: write `Raw response (no typed body)`.
 
-### Type Mapping
+#### Type Mapping
 
 Use these platform-agnostic types in the output:
 
@@ -163,7 +175,7 @@ Use these platform-agnostic types in the output:
 | `Data`, `ByteArray` | `binary` |
 ```
 
-### Extra Headers
+#### Extra Headers
 
 If the API method passes custom headers, list them:
 
@@ -175,12 +187,23 @@ If the API method passes custom headers, list them:
 
 If no extra headers, omit the section.
 
-### Pagination
+#### Pagination
 
 If the endpoint uses pagination (e.g. `nextPageToken` from response headers), note it:
 
 ```markdown
 Pagination via `nextPageToken` response header. Pass as `nextToken` query parameter for next page.
+```
+
+#### Changelog
+
+Always add a changelog section at the end for any future changes. Leave it empty for the initial generation.
+
+```markdown
+# Changelog
+| Date | Brief description |
+| ---- | ----------------- |
+|      |                   |
 ```
 
 ---
