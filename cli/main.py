@@ -54,7 +54,10 @@ async def run(module: str, project_path: Path) -> None:
         print("Error: GITHUB_TOKEN not set (check .env or environment)", file=sys.stderr)
         sys.exit(1)
 
-    config = SubprocessConfig(github_token=github_token)
+    config = SubprocessConfig(
+        github_token=github_token,
+        use_logged_in_user=False,
+    )
 
     async with CopilotClient(config) as client:
         async with await client.create_session(
