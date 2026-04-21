@@ -35,7 +35,7 @@ AI-powered documentation generator for mobile apps. Uses GitHub Copilot agents a
    GITHUB_TOKEN=<your-github-pat>
    ```
 
-   Generate one at [GitHub → Settings → Developer settings → Personal access tokens](https://github.com/settings/tokens).
+   Generate one at [GitHub → Settings → Developer settings → Personal access tokens (fine-grained)](https://github.com/settings/tokens).
 
 5. **Install Python dependencies**
 
