@@ -16,29 +16,6 @@ The app does **not** call the Datadog SDK directly for logging. Instead, it uses
 ### How logs flow to Datadog
 - `Logger.info("msg", LogCategory.X)` → enqueued → `DatadogLogger.log()` → formats message as `"(category) msg"`, maps attributes to `Map<String, Any>`, calls Datadog SDK `Logger.log(priority, message, attributes)`.
 
-## Batch / Flow Loggers (Sub-Loggers)
-
-Some modules use **sub-loggers** that accumulate messages in memory and flush them as a single Datadog log entry. These are important because individual `logMessage()` / `logButtonTapped()` / `logScreenShown()` calls do **not** appear as separate Datadog logs — only the final `submitLog()` call sends one combined log.
-
-### Pattern
-1. A class holds a `ConcurrentLinkedQueue<String>` (or similar buffer).
-2. Methods like `logMessage()`, `logButtonTapped(buttonName)`, `logScreenShown(screenName)` append timestamped strings to the queue.
-3. `submitLog()` drains the entire queue into a single string and calls `Logger.log(message, LogLevel.Info, LogCategory.X)` — producing **one** Datadog log with all accumulated lines.
-4. `clearLog()` discards buffered messages without sending.
-5. A crash-safety handler (`UncaughtExceptionHandler`) may auto-flush on crash.
-
-### Known Sub-Loggers
-| Sub-Logger | Module | Category | Interface File | Impl File |
-|---|---|---|---|---|
-| `PunchFlowLogger` | `punch-v2` | `LogCategory.Punch` | `punch-v2/.../flow/logging/PunchFlowLogger.kt` | `punch-v2/.../flow/logging/PunchFlowLoggerImpl.kt` |
-
-### Finding Sub-Logger Usages
-To find all points that feed into a sub-logger (and therefore into Datadog indirectly), search for:
-- The sub-logger's method calls: `logMessage(`, `logButtonTapped(`, `logScreenShown(`, `submitLog(`, `clearLog(`
-- Scope to the module: e.g., `includePattern: "punch-v2/**"`
-
-These calls will **not** show up in a direct `Logger.*` search, so they must be searched separately.
-
 ## Finding Log Usages
 
 ### Direct Logger calls
