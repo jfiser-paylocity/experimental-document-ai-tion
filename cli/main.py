@@ -69,7 +69,8 @@ async def run(module: str, project_path: Path) -> None:
 
             def on_event(event):
                 if event.type == SessionEventType.ASSISTANT_MESSAGE:
-                    print(event.data.content)
+                    if event.data.content:
+                        print(event.data.content)
                 elif event.type == SessionEventType.SESSION_IDLE:
                     done.set()
 
