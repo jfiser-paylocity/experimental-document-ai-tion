@@ -100,11 +100,13 @@ Then, for each endpoint, create a section:
 **Retry Policy:** readData
 ```
 
-Only add any of the following sections if relevant to that endpoint (i.e. if the endpoint has query parameters, request body, etc.). Use the following formats, including the section headers:
+Only add any of the following sections if relevant to that endpoint (i.e. if the endpoint has query parameters, request body, etc.). Use the following formats:
 
 #### Path Parameters
 
 ```markdown
+#### Path Parameters
+
 | Parameter | Description |
 |-----------|-------------|
 | `companyId` | Company identifier |
@@ -113,6 +115,8 @@ Only add any of the following sections if relevant to that endpoint (i.e. if the
 #### Query Parameters
 
 ````markdown
+#### Query Parameters
+
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | `page` | integer | no | Page number for pagination |
@@ -127,6 +131,8 @@ Only add any of the following sections if relevant to that endpoint (i.e. if the
 #### Request Body
 
 ```markdown
+#### Request Body
+
 **Content-Type:** application/json
 
 | Field | Type | Required | Description |
@@ -141,7 +147,6 @@ For nested structures, show them inline or as a sub-table. Avoid using of platfo
 ```markdown
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `count` | integer | yes | |
 | `items` | array of `Item` | yes | |
 
 **`Item`:**
@@ -180,6 +185,8 @@ Use these platform-agnostic types in the output:
 If the API method passes custom headers, list them:
 
 ```markdown
+#### Extra Headers
+
 | Header | Value | Description |
 |--------|-------|-------------|
 | `pctytid` | `{identityKey}` | Identity key from user session |
@@ -192,6 +199,8 @@ If no extra headers, omit the section.
 If the endpoint uses pagination (e.g. `nextPageToken` from response headers), note it:
 
 ```markdown
+#### Pagination
+
 Pagination via `nextPageToken` response header. Pass as `nextToken` query parameter for next page.
 ```
 
@@ -201,6 +210,7 @@ Always add a changelog section at the end for any future changes. Leave it empty
 
 ```markdown
 # Changelog
+
 | Date | Brief description |
 | ---- | ----------------- |
 |      |                   |
