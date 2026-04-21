@@ -57,6 +57,10 @@ Required classic scopes for scoped tokens:
 - Read-only: `read:confluence-content.all`, `read:confluence-content.summary`, `read:confluence-space.summary`
 - Write: add `write:confluence-content`
 
+## Set up validation
+
+To verify if the tool is properly set up, simply just check that both environment variables are non-empty: `CONFLUENCE_EMAIL` and `CONFLUENCE_API_TOKEN`.
+
 ---
 
 ## Page ID Resolution

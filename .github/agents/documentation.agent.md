@@ -50,7 +50,7 @@ If the documentation already exists, update it with new information instead of o
 
 ## Upload to Confluence
 
-**Important:** Skip this entire section if the `confluence-cli` tool is not configured/initialized.
+**Important:** Skip this step if `confluence-cli` tool is not set up.
 
 Use the `confluence-cli` tool to first read an existing Confluence tree/pages for the target module. If the documentation page already exists, update it with the new content. If it does not exist, create a new page under the appropriate parent page.
 
